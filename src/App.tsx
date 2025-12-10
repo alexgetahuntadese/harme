@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
 import Index from "./pages/Index";
 import GradeSelection from "./pages/GradeSelection";
+import GradesPage from "./pages/GradesPage";
 import SubjectsPage from "./pages/SubjectsPage";
 import ChaptersPage from "./pages/ChaptersPage";
 import QuizPage from "./pages/QuizPage";
@@ -23,6 +24,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/grades" element={<GradesPage />} />
             <Route path="/grade/:grade" element={<GradeSelection />} />
             <Route path="/grade/:grade/subjects" element={<SubjectsPage />} />
             <Route path="/grade/:grade/subject/:subject/chapters" element={<ChaptersPage />} />
