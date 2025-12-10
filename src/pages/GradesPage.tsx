@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Users, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const GradesPage = () => {
@@ -20,13 +20,31 @@ const GradesPage = () => {
           Back to Home
         </Button>
 
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in">
             Select Your Grade
           </h1>
           <p className="text-lg text-blue-100 animate-fade-in [animation-delay:0.2s]">
             Choose your grade level to access quizzes
           </p>
+        </div>
+
+        {/* Multiplayer Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 opacity-0 animate-fade-in [animation-delay:0.3s]">
+          <Button
+            onClick={() => navigate("/host")}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6"
+          >
+            <Users className="mr-2 h-5 w-5" />
+            Host Session
+          </Button>
+          <Button
+            onClick={() => navigate("/join")}
+            className="bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-semibold py-3 px-6"
+          >
+            <LogIn className="mr-2 h-5 w-5" />
+            Join Session
+          </Button>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
