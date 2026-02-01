@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Clock, RotateCcw, ArrowLeft } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, RotateCcw, ArrowLeft, BarChart3 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { saveQuizAttempt } from '@/lib/performanceUtils';
 
 interface Question {
   id: string;
@@ -21,6 +22,10 @@ interface ResultsProps {
   onRetakeQuiz: () => void;
   questions: Question[];
   selectedAnswers: { [key: number]: string };
+  grade?: string;
+  subject?: string;
+  chapter?: string;
+  difficulty?: string;
 }
 
 const Results = ({ 
@@ -29,11 +34,34 @@ const Results = ({
   timeTaken, 
   onRetakeQuiz, 
   questions, 
-  selectedAnswers 
+  selectedAnswers,
+  grade,
+  subject,
+  chapter,
+  difficulty
 }: ResultsProps) => {
   const navigate = useNavigate();
   const params = useParams();
   const percentage = Math.round((score / totalQuestions) * 100);
+  
+  // Save quiz attempt to performance tracking
+  useEffect(() => {
+    const attemptGrade = grade || params.grade || 'Unknown';
+    const attemptSubject = subject || params.subject || 'Unknown';
+    const attemptChapter = chapter || params.chapterId || 'Unknown';
+    const attemptDifficulty = difficulty || params.difficulty || 'medium';
+    
+    saveQuizAttempt({
+      grade: attemptGrade,
+      subject: attemptSubject,
+      chapter: attemptChapter,
+      difficulty: attemptDifficulty,
+      score: percentage,
+      correct_answers: score,
+      total_questions: totalQuestions,
+      time_spent: timeTaken,
+    });
+  }, []);
   
   const getScoreColor = (percentage: number) => {
     if (percentage >= 80) return 'text-green-500';
@@ -95,6 +123,13 @@ const Results = ({
             >
               <RotateCcw className="mr-2 h-4 w-4" />
               Retake Quiz
+            </Button>
+            <Button 
+              onClick={() => navigate('/performance')}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <BarChart3 className="mr-2 h-4 w-4" />
+              View Performance
             </Button>
             <Button 
               variant="outline"
