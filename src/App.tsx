@@ -14,6 +14,8 @@ import QuizPage from "./pages/QuizPage";
 import HostPage from "./pages/HostPage";
 import JoinPage from "./pages/JoinPage";
 import SessionPage from "./pages/SessionPage";
+import PerformancePage from "./pages/PerformancePage";
+import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +37,9 @@ const App = () => (
             <Route path="/host" element={<HostPage />} />
             <Route path="/join" element={<JoinPage />} />
             <Route path="/session/:sessionCode" element={<SessionPage />} />
+            <Route path="/performance" element={<PerformancePage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="*" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
