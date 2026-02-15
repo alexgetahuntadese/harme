@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { CheckCircle, XCircle, Clock, RotateCcw, ArrowLeft, BarChart3 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { saveQuizAttempt } from '@/lib/performanceUtils';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface Question {
   id: string;
@@ -42,9 +43,9 @@ const Results = ({
 }: ResultsProps) => {
   const navigate = useNavigate();
   const params = useParams();
+  const { t } = useLanguage();
   const percentage = Math.round((score / totalQuestions) * 100);
   
-  // Save quiz attempt to performance tracking
   useEffect(() => {
     const attemptGrade = grade || params.grade || 'Unknown';
     const attemptSubject = subject || params.subject || 'Unknown';
@@ -76,12 +77,12 @@ const Results = ({
   };
 
   const getPerformanceMessage = (percentage: number) => {
-    if (percentage >= 90) return 'Excellent! Outstanding performance!';
-    if (percentage >= 80) return 'Great job! Very good understanding!';
-    if (percentage >= 70) return 'Good work! You\'re on the right track!';
-    if (percentage >= 60) return 'Fair performance. Keep practicing!';
-    if (percentage >= 50) return 'You\'re improving. More study needed!';
-    return 'Keep studying and try again!';
+    if (percentage >= 90) return t('results.excellentPerformance');
+    if (percentage >= 80) return t('results.greatJob');
+    if (percentage >= 70) return t('results.goodWork');
+    if (percentage >= 60) return t('results.fairPerformance');
+    if (percentage >= 50) return t('results.improving');
+    return t('results.keepStudying');
   };
 
   const handleBackToChapters = () => {
@@ -96,7 +97,7 @@ const Results = ({
     <div className="space-y-6">
       <Card className="bg-white/5 border-white/20 text-white">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold mb-4 text-white">Quiz Complete!</CardTitle>
+          <CardTitle className="text-2xl font-bold mb-4 text-white">{t('results.complete')}</CardTitle>
           <div className="space-y-4">
             <div className={`text-6xl font-bold ${getScoreColor(percentage)}`}>
               {percentage}%
@@ -104,7 +105,7 @@ const Results = ({
             <Badge 
               className={`${getScoreBadgeColor(percentage)} text-white text-lg px-4 py-2`}
             >
-              {score} out of {totalQuestions} correct
+              {score} {t('results.outOf')} {totalQuestions} {t('results.correct').toLowerCase()}
             </Badge>
             <p className="text-lg text-gray-300">
               {getPerformanceMessage(percentage)}
@@ -114,7 +115,7 @@ const Results = ({
         <CardContent className="text-center space-y-4">
           <div className="flex items-center justify-center space-x-2 text-gray-300">
             <Clock className="h-5 w-5" />
-            <span>Time taken: {timeTaken}</span>
+            <span>{t('results.timeTaken')}: {timeTaken}</span>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
@@ -122,14 +123,14 @@ const Results = ({
               className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <RotateCcw className="mr-2 h-4 w-4" />
-              Retake Quiz
+              {t('results.retake')}
             </Button>
             <Button 
               onClick={() => navigate('/performance')}
               className="bg-green-600 hover:bg-green-700 text-white"
             >
               <BarChart3 className="mr-2 h-4 w-4" />
-              View Performance
+              {t('results.viewPerformance')}
             </Button>
             <Button 
               variant="outline"
@@ -137,14 +138,14 @@ const Results = ({
               className="border-white/20 text-white hover:bg-white/10"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Chapters
+              {t('common.backToChapters')}
             </Button>
           </div>
         </CardContent>
       </Card>
 
       <div className="space-y-4">
-        <h3 className="text-xl font-semibold text-white mb-4">Question Review</h3>
+        <h3 className="text-xl font-semibold text-white mb-4">{t('results.questionReview')}</h3>
         {questions.map((question, index) => {
           const userAnswer = selectedAnswers[index];
           const isCorrect = userAnswer === question.correct;
@@ -154,7 +155,7 @@ const Results = ({
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
                   <Badge variant="secondary" className="bg-gray-600 text-white">
-                    Question {index + 1}
+                    {t('quiz.question')} {index + 1}
                   </Badge>
                   {isCorrect ? (
                     <CheckCircle className="h-6 w-6 text-green-500" />
@@ -195,7 +196,7 @@ const Results = ({
                 
                 {question.explanation && (
                   <div className="mt-4 p-4 bg-blue-900/30 border border-blue-500/30 rounded-lg">
-                    <h4 className="font-semibold text-blue-300 mb-2">Explanation:</h4>
+                    <h4 className="font-semibold text-blue-300 mb-2">{t('results.explanation')}:</h4>
                     <p className="text-gray-300">{question.explanation}</p>
                   </div>
                 )}

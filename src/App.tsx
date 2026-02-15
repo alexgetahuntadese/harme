@@ -5,6 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "next-themes";
+import { LanguageProvider } from "@/i18n/LanguageContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Index from "./pages/Index";
 import GradeSelection from "./pages/GradeSelection";
 import GradesPage from "./pages/GradesPage";
@@ -23,27 +25,29 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/grades" element={<GradesPage />} />
-            <Route path="/grade/:grade" element={<GradeSelection />} />
-            <Route path="/grade/:grade/subjects" element={<SubjectsPage />} />
-            <Route path="/grade/:grade/subject/:subject/chapters" element={<ChaptersPage />} />
-            <Route path="/grade/:grade/subject/:subject/chapter/:chapterId/difficulty/:difficulty/quiz" element={<QuizPage />} />
-            <Route path="/host" element={<HostPage />} />
-            <Route path="/join" element={<JoinPage />} />
-            <Route path="/session/:sessionCode" element={<SessionPage />} />
-            <Route path="/performance" element={<PerformancePage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="*" element={<NotFound />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <LanguageProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <LanguageSwitcher />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/grades" element={<GradesPage />} />
+              <Route path="/grade/:grade" element={<GradeSelection />} />
+              <Route path="/grade/:grade/subjects" element={<SubjectsPage />} />
+              <Route path="/grade/:grade/subject/:subject/chapters" element={<ChaptersPage />} />
+              <Route path="/grade/:grade/subject/:subject/chapter/:chapterId/difficulty/:difficulty/quiz" element={<QuizPage />} />
+              <Route path="/host" element={<HostPage />} />
+              <Route path="/join" element={<JoinPage />} />
+              <Route path="/session/:sessionCode" element={<SessionPage />} />
+              <Route path="/performance" element={<PerformancePage />} />
+              <Route path="/profile" element={<ProfilePage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </LanguageProvider>
     </ThemeProvider>
   </QueryClientProvider>
 );

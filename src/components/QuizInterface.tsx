@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-// import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { 
   ArrowLeft, 
@@ -15,6 +14,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { getQuestionsForQuiz } from '@/data/naturalScienceQuizzes';
 import QuestionExplanation from './QuestionExplanation';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface QuizInterfaceProps {
   quiz: any;
@@ -31,17 +31,16 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
   const [results, setResults] = useState<any>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const questions = useMemo(() => {
     const generateQuestions = () => {
       if (quiz.chapters && quiz.chapters.length > 0) {
         const allQuestions: any[] = [];
-        
         quiz.chapters.forEach((chapter: string) => {
           const chapterQuestions = getQuestionsForQuiz(quiz.subject, chapter, quiz.difficulty, 2);
           allQuestions.push(...chapterQuestions);
         });
-        
         const shuffled = allQuestions.sort(() => Math.random() - 0.5);
         return shuffled.slice(0, Math.min(quiz.questions || 10, shuffled.length));
       }
@@ -53,10 +52,6 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
-  console.log('Quiz started:', quiz);
-  console.log('Generated questions:', questions);
-  console.log('Current question:', currentQuestion);
-
   useEffect(() => {
     if (timeLeft > 0 && !quizCompleted) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -66,7 +61,6 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
     }
   }, [timeLeft, quizCompleted]);
 
-  // Reset explanation when moving to a new question
   useEffect(() => {
     setShowExplanation(false);
   }, [currentQuestionIndex]);
@@ -78,11 +72,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
   };
 
   const handleAnswerSelect = (answer: string) => {
-    setSelectedAnswers(prev => ({
-      ...prev,
-      [currentQuestion.id]: answer
-    }));
-    console.log('Answer selected:', answer, 'for question:', currentQuestion.id);
+    setSelectedAnswers(prev => ({ ...prev, [currentQuestion.id]: answer }));
   };
 
   const handleShowExplanation = () => {
@@ -90,9 +80,6 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
   };
 
   const handleNextQuestion = () => {
-    console.log('Next question clicked, current index:', currentQuestionIndex);
-    console.log('Total questions:', questions.length);
-    
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
@@ -101,41 +88,28 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
   };
 
   const handlePreviousQuestion = () => {
-    console.log('Previous question clicked, current index:', currentQuestionIndex);
-    
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
 
   const handleSubmitQuiz = () => {
-    console.log('Submitting quiz...');
-    console.log('Selected answers:', selectedAnswers);
-    console.log('Questions:', questions);
-    
     const correctAnswers = questions.filter(q => selectedAnswers[q.id] === q.correct).length;
     const score = Math.round((correctAnswers / questions.length) * 100);
     
     const quizResults = {
-      quiz: quiz,
-      score: score,
-      correctAnswers: correctAnswers,
-      totalQuestions: questions.length,
-      timeSpent: (quiz.duration * 60) - timeLeft,
-      answers: selectedAnswers
+      quiz, score, correctAnswers, totalQuestions: questions.length,
+      timeSpent: (quiz.duration * 60) - timeLeft, answers: selectedAnswers
     };
-
-    console.log('Quiz results:', quizResults);
     
     setResults(quizResults);
     setQuizCompleted(true);
 
     toast({
-      title: "Quiz Completed!",
-      description: `You scored ${score}% (${correctAnswers}/${questions.length})`,
+      title: t('session.quizCompleted'),
+      description: `${t('results.score')}: ${score}% (${correctAnswers}/${questions.length})`,
     });
 
-    // Call the onComplete callback
     onComplete(quizResults);
   };
 
@@ -147,8 +121,8 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
     setResults(null);
     
     toast({
-      title: "Quiz Reset",
-      description: "Starting fresh quiz attempt",
+      title: t('quiz.quizReset'),
+      description: t('quiz.startingFresh'),
     });
   };
 
@@ -162,9 +136,9 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
         <div className="max-w-4xl mx-auto">
           <Card className="bg-slate-800 border-slate-700 text-white">
             <CardContent className="p-6 text-center">
-              <p className="text-xl mb-4 text-white">No questions available for this quiz.</p>
+              <p className="text-xl mb-4 text-white">{t('common.noQuestionsAvailable')}</p>
               <Button onClick={handleBackToSubjects} className="bg-gradient-to-r from-green-600 to-yellow-600 text-white">
-                Back to Subjects
+                {t('common.backToSubjects')}
               </Button>
             </CardContent>
           </Card>
@@ -184,7 +158,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
                   <Award className="h-12 w-12 text-white" />
                 </div>
               </div>
-              <CardTitle className="text-3xl font-bold text-white">Quiz Complete!</CardTitle>
+              <CardTitle className="text-3xl font-bold text-white">{t('results.complete')}</CardTitle>
               <div className="flex justify-center items-center space-x-2 mt-4">
                 {[...Array(5)].map((_, i) => (
                   <Star 
@@ -204,7 +178,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
                   {results.score}%
                 </div>
                 <p className="text-xl text-white">
-                  {results.correctAnswers} out of {results.totalQuestions} questions correct
+                  {results.correctAnswers} {t('results.outOf')} {results.totalQuestions} {t('results.questionsCorrect')}
                 </p>
                 <Badge 
                   className={`text-lg px-6 py-2 text-white ${
@@ -213,29 +187,29 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
                     results.score >= 50 ? 'bg-orange-500' : 'bg-red-500'
                   }`}
                 >
-                  {results.score >= 90 ? 'Excellent!' :
-                   results.score >= 70 ? 'Good Job!' :
-                   results.score >= 50 ? 'Keep Practicing!' : 'Needs Improvement'}
+                  {results.score >= 90 ? t('results.excellent') :
+                   results.score >= 70 ? t('results.goodJob') :
+                   results.score >= 50 ? t('results.keepPracticing') : t('results.needsImprovement')}
                 </Badge>
               </div>
 
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div className="bg-slate-700 rounded-lg p-4">
                   <div className="text-2xl font-bold text-green-400">{results.correctAnswers}</div>
-                  <div className="text-sm text-white">Correct</div>
+                  <div className="text-sm text-white">{t('results.correct')}</div>
                 </div>
                 <div className="bg-slate-700 rounded-lg p-4">
                   <div className="text-2xl font-bold text-red-400">{results.totalQuestions - results.correctAnswers}</div>
-                  <div className="text-sm text-white">Incorrect</div>
+                  <div className="text-sm text-white">{t('results.incorrect')}</div>
                 </div>
                 <div className="bg-slate-700 rounded-lg p-4">
                   <div className="text-2xl font-bold text-blue-400">{Math.floor(results.timeSpent / 60)}m</div>
-                  <div className="text-sm text-white">Time Spent</div>
+                  <div className="text-sm text-white">{t('results.timeSpent')}</div>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-xl font-bold text-white">Review Your Answers</h3>
+                <h3 className="text-xl font-bold text-white">{t('results.reviewAnswers')}</h3>
                 {questions.map((question, index) => {
                   const userAnswer = selectedAnswers[question.id];
                   const isCorrect = userAnswer === question.correct;
@@ -251,9 +225,9 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
                         <div className="flex-1">
                           <p className="font-medium mb-2 text-white">Q{index + 1}: {question.question}</p>
                           <div className="text-sm space-y-1">
-                            <p className="text-white">Your answer: <span className={isCorrect ? 'text-green-400' : 'text-red-400'}>{userAnswer || 'Not answered'}</span></p>
+                            <p className="text-white">{t('results.yourAnswer')}: <span className={isCorrect ? 'text-green-400' : 'text-red-400'}>{userAnswer || t('results.notAnswered')}</span></p>
                             {!isCorrect && (
-                              <p className="text-white">Correct answer: <span className="text-green-400">{question.correct}</span></p>
+                              <p className="text-white">{t('results.correctAnswer')}: <span className="text-green-400">{question.correct}</span></p>
                             )}
                             <p className="text-gray-300 italic">{question.explanation}</p>
                           </div>
@@ -269,7 +243,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
                   onClick={handleBackToSubjects}
                   className="bg-gradient-to-r from-green-600 to-yellow-600 hover:from-green-700 hover:to-yellow-700 text-white border-0"
                 >
-                  Back to Subjects
+                  {t('common.backToSubjects')}
                 </Button>
                 <Button 
                   variant="outline"
@@ -277,7 +251,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
                   className="border-slate-600 text-slate-900 bg-white hover:bg-slate-100"
                 >
                   <RefreshCw className="mr-2 h-4 w-4 text-slate-900" />
-                  Retake Quiz
+                  {t('quiz.retakeQuiz')}
                 </Button>
               </div>
             </CardContent>
@@ -299,7 +273,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
             className="text-white hover:bg-slate-800"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Subjects
+            {t('common.backToSubjects')}
           </Button>
           
           <div className="flex items-center space-x-4">
@@ -317,7 +291,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
 
         <div className="mb-8">
           <div className="flex justify-between text-sm mb-2 text-white">
-            <span>Progress</span>
+            <span>{t('quiz.progress')}</span>
             <span>{Math.round(progress)}%</span>
           </div>
           <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
@@ -331,7 +305,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
         <Card className="bg-slate-800 border-slate-700 text-white mb-6">
           <CardHeader>
             <CardTitle className="text-xl text-white">
-              Question {currentQuestionIndex + 1}
+              {t('quiz.question')} {currentQuestionIndex + 1}
               {quiz.difficulty && (
                 <Badge className={`ml-2 ${
                   quiz.difficulty === 'Easy' ? 'bg-green-500' :
@@ -381,7 +355,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
             disabled={currentQuestionIndex === 0}
             className="border-slate-600 text-white bg-slate-800 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Previous
+            {t('quiz.previous')}
           </Button>
           
           {!showExplanation && selectedAnswers[currentQuestion.id] ? (
@@ -389,7 +363,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
               onClick={handleShowExplanation}
               className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white border-0"
             >
-              Check Answer
+              {t('quiz.checkAnswer')}
             </Button>
           ) : (
             <Button
@@ -397,13 +371,13 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
               disabled={!selectedAnswers[currentQuestion.id]}
               className="bg-gradient-to-r from-green-600 to-yellow-600 hover:from-green-700 hover:to-yellow-700 text-white border-0 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {currentQuestionIndex === questions.length - 1 ? 'Submit Quiz' : 'Next Question'}
+              {currentQuestionIndex === questions.length - 1 ? t('quiz.submit') : t('quiz.next')}
             </Button>
           )}
         </div>
 
         <div className="mt-8 p-4 bg-slate-800 rounded-lg">
-          <h4 className="text-sm font-medium mb-3 text-white">Question Navigator</h4>
+          <h4 className="text-sm font-medium mb-3 text-white">{t('quiz.questionNavigator')}</h4>
           <div className="flex flex-wrap gap-2">
             {questions.map((_, index) => (
               <Button

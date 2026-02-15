@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { QuizAttempt } from '@/lib/performanceUtils';
 import { Clock, BookOpen, Trophy } from 'lucide-react';
 import { format } from 'date-fns';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface PerformanceHistoryProps {
   attempts: QuizAttempt[];
@@ -13,6 +14,7 @@ interface PerformanceHistoryProps {
 
 const PerformanceHistory = ({ attempts }: PerformanceHistoryProps) => {
   const [filter, setFilter] = useState<string>('all');
+  const { t } = useLanguage();
   
   const subjects = [...new Set(attempts.map(a => a.subject))];
   
@@ -34,11 +36,11 @@ const PerformanceHistory = ({ attempts }: PerformanceHistoryProps) => {
     return (
       <Card className="bg-white/5 border-white/20">
         <CardHeader>
-          <CardTitle className="text-white text-xl">Quiz History</CardTitle>
+          <CardTitle className="text-white text-xl">{t('history.quizHistory')}</CardTitle>
         </CardHeader>
         <CardContent className="text-center py-8">
           <BookOpen className="h-12 w-12 text-gray-500 mx-auto mb-3" />
-          <p className="text-gray-400">No quiz attempts yet. Start taking quizzes to build your history!</p>
+          <p className="text-gray-400">{t('history.noAttempts')}</p>
         </CardContent>
       </Card>
     );
@@ -47,17 +49,15 @@ const PerformanceHistory = ({ attempts }: PerformanceHistoryProps) => {
   return (
     <Card className="bg-white/5 border-white/20">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-white text-xl">Quiz History</CardTitle>
+        <CardTitle className="text-white text-xl">{t('history.quizHistory')}</CardTitle>
         <Select value={filter} onValueChange={setFilter}>
           <SelectTrigger className="w-[180px] bg-white/10 border-white/20 text-white">
-            <SelectValue placeholder="Filter by subject" />
+            <SelectValue placeholder={t('history.filterBySubject')} />
           </SelectTrigger>
           <SelectContent className="bg-gray-800 border-gray-700">
-            <SelectItem value="all" className="text-white hover:bg-gray-700">All Subjects</SelectItem>
+            <SelectItem value="all" className="text-white hover:bg-gray-700">{t('history.allSubjects')}</SelectItem>
             {subjects.map(subject => (
-              <SelectItem key={subject} value={subject} className="text-white hover:bg-gray-700">
-                {subject}
-              </SelectItem>
+              <SelectItem key={subject} value={subject} className="text-white hover:bg-gray-700">{subject}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -73,7 +73,7 @@ const PerformanceHistory = ({ attempts }: PerformanceHistoryProps) => {
                 <div>
                   <h4 className="text-white font-medium">{attempt.subject}</h4>
                   <p className="text-sm text-gray-400">
-                    Grade {attempt.grade} • {attempt.chapter}
+                    {t('common.grade')} {attempt.grade} • {attempt.chapter}
                   </p>
                 </div>
                 <Badge className={`${getScoreColor(attempt.score)} text-white`}>

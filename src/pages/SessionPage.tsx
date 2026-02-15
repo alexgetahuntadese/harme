@@ -15,6 +15,7 @@ import {
 import { getQuestionsForQuiz } from "@/lib/quizUtils";
 import LiveQuizSession from "@/components/session/LiveQuizSession";
 import SessionLeaderboard from "@/components/session/SessionLeaderboard";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 type SessionStatus = 'waiting' | 'in_progress' | 'completed';
 
@@ -47,6 +48,7 @@ const SessionPage = () => {
   const { sessionCode } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { t } = useLanguage();
   
   const [session, setSession] = useState<Session | null>(null);
   const [participants, setParticipants] = useState<Participant[]>([]);
@@ -72,8 +74,6 @@ const SessionPage = () => {
     setIsHost(storedIsHost);
 
     refreshData();
-
-    // Poll for updates every second
     const interval = setInterval(refreshData, 1000);
     return () => clearInterval(interval);
   }, [sessionCode, refreshData]);
@@ -126,18 +126,17 @@ const SessionPage = () => {
 
   const copyCode = () => {
     navigator.clipboard.writeText(sessionCode || '');
-    toast({ title: "Code copied!" });
+    toast({ title: t('common.codeCopied') });
   };
 
   if (!session) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-800 to-indigo-700 flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+        <div className="text-white text-xl">{t('common.loading')}</div>
       </div>
     );
   }
 
-  // Completed state
   if (session.status === 'completed') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-800 to-indigo-700 p-4">
@@ -145,7 +144,7 @@ const SessionPage = () => {
           <Card className="bg-white/10 backdrop-blur-md border-white/20">
             <CardHeader className="text-center">
               <Trophy className="h-16 w-16 text-yellow-400 mx-auto mb-4" />
-              <CardTitle className="text-3xl text-white">Quiz Complete!</CardTitle>
+              <CardTitle className="text-3xl text-white">{t('results.complete')}</CardTitle>
             </CardHeader>
             <CardContent>
               <SessionLeaderboard participants={participants} />
@@ -153,7 +152,7 @@ const SessionPage = () => {
                 onClick={() => navigate('/grades')}
                 className="w-full mt-6 bg-gradient-to-r from-purple-500 to-pink-500"
               >
-                Back to Home
+                {t('common.backToHome')}
               </Button>
             </CardContent>
           </Card>
@@ -162,7 +161,6 @@ const SessionPage = () => {
     );
   }
 
-  // In progress state
   if (session.status === 'in_progress' && questions.length > 0) {
     const currentQuestion = questions[session.current_question_index];
     const isLastQuestion = session.current_question_index >= questions.length - 1;
@@ -172,11 +170,11 @@ const SessionPage = () => {
         <div className="max-w-4xl mx-auto">
           <div className="flex justify-between items-center mb-4">
             <div className="text-white">
-              Question {session.current_question_index + 1} / {questions.length}
+              {t('quiz.question')} {session.current_question_index + 1} / {questions.length}
             </div>
             <div className="text-white flex items-center gap-2">
               <Users className="h-4 w-4" />
-              {participants.length} players
+              {participants.length} {t('common.players')}
             </div>
           </div>
 
@@ -194,11 +192,11 @@ const SessionPage = () => {
                 <div className="mt-4 flex gap-2">
                   {!isLastQuestion ? (
                     <Button onClick={handleNextQuestion} className="flex-1 bg-blue-500 hover:bg-blue-600">
-                      Next Question
+                      {t('session.nextQuestion')}
                     </Button>
                   ) : (
                     <Button onClick={handleEndSession} className="flex-1 bg-green-500 hover:bg-green-600">
-                      End Quiz
+                      {t('session.endQuiz')}
                     </Button>
                   )}
                 </div>
@@ -214,7 +212,6 @@ const SessionPage = () => {
     );
   }
 
-  // Waiting room state
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-800 to-indigo-700 p-4">
       <div className="max-w-md mx-auto">
@@ -224,12 +221,12 @@ const SessionPage = () => {
           className="text-white hover:bg-white/10 mb-6"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Leave Session
+          {t('common.leaveSession')}
         </Button>
 
         <Card className="bg-white/10 backdrop-blur-md border-white/20 mb-4">
           <CardHeader className="text-center">
-            <CardTitle className="text-xl text-white">Session Code</CardTitle>
+            <CardTitle className="text-xl text-white">{t('session.sessionCode')}</CardTitle>
           </CardHeader>
           <CardContent>
             <div 
@@ -241,7 +238,7 @@ const SessionPage = () => {
               </span>
               <Copy className="h-5 w-5 text-white/70" />
             </div>
-            <p className="text-center text-white/60 text-sm mt-2">Click to copy</p>
+            <p className="text-center text-white/60 text-sm mt-2">{t('common.clickToCopy')}</p>
           </CardContent>
         </Card>
 
@@ -249,7 +246,7 @@ const SessionPage = () => {
           <CardHeader>
             <CardTitle className="text-lg text-white flex items-center gap-2">
               <Users className="h-5 w-5" />
-              Players ({participants.length})
+              {t('common.players')} ({participants.length})
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -261,7 +258,7 @@ const SessionPage = () => {
                 >
                   <span className="text-white">{p.player_name}</span>
                   {p.is_host && (
-                    <span className="text-xs bg-purple-500 text-white px-2 py-1 rounded">Host</span>
+                    <span className="text-xs bg-purple-500 text-white px-2 py-1 rounded">{t('common.host')}</span>
                   )}
                 </div>
               ))}
@@ -272,9 +269,9 @@ const SessionPage = () => {
         <Card className="bg-white/10 backdrop-blur-md border-white/20 mb-4">
           <CardContent className="pt-4">
             <div className="text-white/80 text-sm space-y-1">
-              <p>Grade: {session.grade}</p>
-              <p>Subject: {session.subject}</p>
-              <p>Difficulty: {session.difficulty}</p>
+              <p>{t('common.grade')}: {session.grade}</p>
+              <p>{t('common.subject')}: {session.subject}</p>
+              <p>{t('common.difficulty')}: {session.difficulty}</p>
             </div>
           </CardContent>
         </Card>
@@ -286,11 +283,11 @@ const SessionPage = () => {
             className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-semibold py-3"
           >
             <Play className="mr-2 h-5 w-5" />
-            Start Quiz
+            {t('session.startQuiz')}
           </Button>
         ) : (
           <div className="text-center text-white/60">
-            Waiting for host to start the quiz...
+            {t('session.waitingForHost')}
           </div>
         )}
       </div>

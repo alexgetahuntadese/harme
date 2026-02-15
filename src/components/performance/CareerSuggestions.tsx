@@ -4,12 +4,14 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { CareerMatch, getTopCareerRecommendations } from '@/lib/careerData';
 import { CheckCircle, XCircle, Briefcase } from 'lucide-react';
+import { useLanguage } from '@/i18n/LanguageContext';
 
 interface CareerSuggestionsProps {
   subjectScores: { [subject: string]: number };
 }
 
 const CareerSuggestions = ({ subjectScores }: CareerSuggestionsProps) => {
+  const { t } = useLanguage();
   const matches = getTopCareerRecommendations(subjectScores, 5);
   
   if (Object.keys(subjectScores).length === 0) {
@@ -18,13 +20,11 @@ const CareerSuggestions = ({ subjectScores }: CareerSuggestionsProps) => {
         <CardHeader>
           <CardTitle className="text-white text-xl flex items-center gap-2">
             <Briefcase className="h-6 w-6" />
-            Career Recommendations
+            {t('career.careerRecommendations')}
           </CardTitle>
         </CardHeader>
         <CardContent className="text-center py-8">
-          <p className="text-gray-400">
-            Complete quizzes in different subjects to get personalized career recommendations!
-          </p>
+          <p className="text-gray-400">{t('career.completeQuizzes')}</p>
         </CardContent>
       </Card>
     );
@@ -35,11 +35,9 @@ const CareerSuggestions = ({ subjectScores }: CareerSuggestionsProps) => {
       <CardHeader>
         <CardTitle className="text-white text-xl flex items-center gap-2">
           <Briefcase className="h-6 w-6" />
-          Career Recommendations
+          {t('career.careerRecommendations')}
         </CardTitle>
-        <p className="text-gray-400 text-sm">
-          Based on your performance across subjects, here are career paths that match your skills
-        </p>
+        <p className="text-gray-400 text-sm">{t('career.basedOnPerformance')}</p>
       </CardHeader>
       <CardContent className="space-y-4">
         {matches.map((match, index) => (
@@ -51,6 +49,7 @@ const CareerSuggestions = ({ subjectScores }: CareerSuggestionsProps) => {
 };
 
 const CareerCard = ({ match, rank }: { match: CareerMatch; rank: number }) => {
+  const { t } = useLanguage();
   const { track, matchScore, matchedSubjects, missingSubjects } = match;
   
   return (
@@ -63,16 +62,14 @@ const CareerCard = ({ match, rank }: { match: CareerMatch; rank: number }) => {
             <p className="text-gray-300 text-sm">{track.description.slice(0, 80)}...</p>
           </div>
         </div>
-        <Badge 
-          className={`${matchScore >= 70 ? 'bg-green-500' : matchScore >= 50 ? 'bg-yellow-500' : 'bg-orange-500'} text-white`}
-        >
+        <Badge className={`${matchScore >= 70 ? 'bg-green-500' : matchScore >= 50 ? 'bg-yellow-500' : 'bg-orange-500'} text-white`}>
           #{rank}
         </Badge>
       </div>
       
       <div className="mb-3">
         <div className="flex justify-between text-sm mb-1">
-          <span className="text-gray-300">Match Score</span>
+          <span className="text-gray-300">{t('career.matchScore')}</span>
           <span className="text-white font-medium">{matchScore}%</span>
         </div>
         <Progress value={matchScore} className="h-2 bg-white/10" />
@@ -80,40 +77,36 @@ const CareerCard = ({ match, rank }: { match: CareerMatch; rank: number }) => {
 
       <div className="grid grid-cols-2 gap-4 mb-3">
         <div>
-          <p className="text-xs text-gray-400 mb-1">Strong Subjects</p>
+          <p className="text-xs text-gray-400 mb-1">{t('career.strongSubjects')}</p>
           <div className="flex flex-wrap gap-1">
             {matchedSubjects.length > 0 ? matchedSubjects.map(subject => (
               <span key={subject} className="inline-flex items-center gap-1 text-xs text-green-400">
-                <CheckCircle className="h-3 w-3" />
-                {subject}
+                <CheckCircle className="h-3 w-3" />{subject}
               </span>
             )) : (
-              <span className="text-xs text-gray-500">None yet</span>
+              <span className="text-xs text-gray-500">{t('career.noneYet')}</span>
             )}
           </div>
         </div>
         <div>
-          <p className="text-xs text-gray-400 mb-1">Need Practice</p>
+          <p className="text-xs text-gray-400 mb-1">{t('career.needPractice')}</p>
           <div className="flex flex-wrap gap-1">
             {missingSubjects.length > 0 ? missingSubjects.map(subject => (
               <span key={subject} className="inline-flex items-center gap-1 text-xs text-orange-400">
-                <XCircle className="h-3 w-3" />
-                {subject}
+                <XCircle className="h-3 w-3" />{subject}
               </span>
             )) : (
-              <span className="text-xs text-green-400">All covered!</span>
+              <span className="text-xs text-green-400">{t('career.allCovered')}</span>
             )}
           </div>
         </div>
       </div>
 
       <div>
-        <p className="text-xs text-gray-400 mb-1">Sample Careers</p>
+        <p className="text-xs text-gray-400 mb-1">{t('career.sampleCareers')}</p>
         <div className="flex flex-wrap gap-1">
           {track.careers.slice(0, 4).map(career => (
-            <Badge key={career} variant="outline" className="text-xs border-white/20 text-gray-300">
-              {career}
-            </Badge>
+            <Badge key={career} variant="outline" className="text-xs border-white/20 text-gray-300">{career}</Badge>
           ))}
         </div>
       </div>
