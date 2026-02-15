@@ -2,9 +2,11 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Users, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/i18n/LanguageContext";
 
 const GradesPage = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const grades = Array.from({ length: 12 }, (_, i) => i + 1);
 
@@ -17,33 +19,32 @@ const GradesPage = () => {
           className="text-white hover:bg-white/10 mb-6"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Home
+          {t('common.backToHome')}
         </Button>
 
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in">
-            Select Your Grade
+            {t('grades.selectGrade')}
           </h1>
           <p className="text-lg text-blue-100 animate-fade-in [animation-delay:0.2s]">
-            Choose your grade level to access quizzes
+            {t('grades.chooseGrade')}
           </p>
         </div>
 
-        {/* Multiplayer Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8 opacity-0 animate-fade-in [animation-delay:0.3s]">
           <Button
             onClick={() => navigate("/host")}
             className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 px-6"
           >
             <Users className="mr-2 h-5 w-5" />
-            Host Session
+            {t('grades.hostSession')}
           </Button>
           <Button
             onClick={() => navigate("/join")}
             className="bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-semibold py-3 px-6"
           >
             <LogIn className="mr-2 h-5 w-5" />
-            Join Session
+            {t('grades.joinSession')}
           </Button>
         </div>
 
@@ -57,7 +58,7 @@ const GradesPage = () => {
             >
               <CardHeader className="pb-2">
                 <CardTitle className="text-center text-white text-lg">
-                  Grade
+                  {t('common.grade')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
