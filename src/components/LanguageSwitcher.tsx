@@ -2,6 +2,9 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
 
+const languageCycle = { en: 'om', om: 'am', am: 'en' } as const;
+const languageLabels = { en: 'EN', om: 'OM', am: 'አማ' } as const;
+
 const LanguageSwitcher = () => {
   const { language, setLanguage } = useLanguage();
 
@@ -10,11 +13,11 @@ const LanguageSwitcher = () => {
       <Button
         variant="outline"
         size="sm"
-        onClick={() => setLanguage(language === 'en' ? 'om' : 'en')}
+        onClick={() => setLanguage(languageCycle[language])}
         className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 gap-2"
       >
         <Globe className="h-4 w-4" />
-        {language === 'en' ? 'OM' : 'EN'}
+        {languageLabels[language]}
       </Button>
     </div>
   );
