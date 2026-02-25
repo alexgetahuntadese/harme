@@ -14,7 +14,7 @@ const LanguageSwitcher = () => {
         variant="outline"
         size="sm"
         onClick={() => setLanguage(languageCycle[language])}
-        className="bg-white/10 backdrop-blur-md border-white/20 text-white hover:bg-white/20 gap-2"
+        className="bg-white/90 backdrop-blur-md border-white text-gray-900 hover:bg-white font-semibold gap-2 shadow-lg"
       >
         <Globe className="h-4 w-4" />
         {languageLabels[language]}
