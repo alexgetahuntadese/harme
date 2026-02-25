@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, Users, BookOpen } from "lucide-react";
+import { BarChart3, BookOpen } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const Index = () => {
@@ -69,35 +69,6 @@ const Index = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20 transition-all duration-300 shadow-2xl hover:shadow-blue-500/20 opacity-0 animate-fade-in [animation-delay:0.8s]">
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <Users className="h-8 w-8 text-blue-400" />
-                <div>
-                  <CardTitle className="text-white text-xl">{t('index.multiplayer')}</CardTitle>
-                  <CardDescription className="text-blue-100">
-                    {t('index.hostOrJoin')}
-                  </CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="flex gap-2">
-              <Button 
-                onClick={() => navigate('/host')}
-                variant="outline"
-                className="flex-1 border-blue-400/50 text-blue-300 hover:bg-blue-500/20"
-              >
-                {t('common.host')}
-              </Button>
-              <Button 
-                onClick={() => navigate('/join')}
-                variant="outline"
-                className="flex-1 border-cyan-400/50 text-cyan-300 hover:bg-cyan-500/20"
-              >
-                {t('common.join')}
-              </Button>
-            </CardContent>
-          </Card>
         </div>
 
         <div className="mt-12 text-center opacity-0 animate-fade-in [animation-delay:1s]">
