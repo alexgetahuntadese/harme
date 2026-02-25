@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 import { en, TranslationKeys } from './translations/en';
 import { om } from './translations/om';
+import { am } from './translations/am';
 
-type Language = 'en' | 'om';
+type Language = 'en' | 'om' | 'am';
 
 interface LanguageContextType {
   language: Language;
@@ -10,7 +11,7 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
-const translations: Record<Language, TranslationKeys> = { en, om };
+const translations: Record<Language, TranslationKeys> = { en, om, am };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
