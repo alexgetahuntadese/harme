@@ -2,8 +2,8 @@ import { useLanguage } from '@/i18n/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
 
-const languageCycle = { en: 'om', om: 'am', am: 'en' } as const;
-const languageLabels = { en: 'EN', om: 'OM', am: 'አማ' } as const;
+const languageCycle: Record<string, 'en' | 'om' | 'am'> = { en: 'om', om: 'am', am: 'en' };
+const languageLabels: Record<string, string> = { en: 'EN', om: 'OM', am: 'አማ' };
 
 const LanguageSwitcher = () => {
   const { language, setLanguage } = useLanguage();
