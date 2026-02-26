@@ -13,6 +13,7 @@ import GradesPage from "./pages/GradesPage";
 import SubjectsPage from "./pages/SubjectsPage";
 import ChaptersPage from "./pages/ChaptersPage";
 import QuizPage from "./pages/QuizPage";
+import CareerSimulatorPage from "./pages/CareerSimulatorPage";
 import PerformancePage from "./pages/PerformancePage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/grade/:grade/subjects" element={<SubjectsPage />} />
               <Route path="/grade/:grade/subject/:subject/chapters" element={<ChaptersPage />} />
               <Route path="/grade/:grade/subject/:subject/chapter/:chapterId/difficulty/:difficulty/quiz" element={<QuizPage />} />
+              <Route path="/career-simulator" element={<CareerSimulatorPage />} />
               <Route path="/performance" element={<PerformancePage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="*" element={<NotFound />} />

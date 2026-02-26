@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart3, BookOpen } from "lucide-react";
+import { BarChart3, BookOpen, Sparkles } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageContext";
 
 const Index = () => {
@@ -69,6 +69,27 @@ const Index = () => {
             </CardContent>
           </Card>
 
+          <Card className="bg-white/10 backdrop-blur-md border-white/20 hover:bg-white/20 transition-all duration-300 shadow-2xl hover:shadow-yellow-500/20 opacity-0 animate-fade-in [animation-delay:0.8s] md:col-span-2">
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Sparkles className="h-8 w-8 text-yellow-400" />
+                <div>
+                  <CardTitle className="text-white text-xl">🚀 Future Me Mode</CardTitle>
+                  <CardDescription className="text-blue-100">
+                    AI-powered career simulator — experience a day in any career!
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <Button 
+                onClick={() => navigate('/career-simulator')}
+                className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-semibold py-3 shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                Try Career Simulator
+              </Button>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="mt-12 text-center opacity-0 animate-fade-in [animation-delay:1s]">
