@@ -190,7 +190,7 @@ const CareerSimulatorPage = () => {
                 <Button
                   key={choice.id}
                   variant="outline"
-                  className="w-full justify-between text-left h-auto py-4 px-5 border-white/20 text-white hover:bg-white/10 hover:border-purple-400 transition-all"
+                  className="w-full justify-between text-left h-auto py-4 px-5 bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-purple-400 transition-all"
                   onClick={() => handleChoice(choice)}
                 >
                   <span>{choice.text}</span>
@@ -240,7 +240,7 @@ const CareerSimulatorPage = () => {
                 <Button
                   key={choice.id}
                   variant="outline"
-                  className="w-full justify-between text-left h-auto py-4 px-5 border-white/20 text-white hover:bg-white/10 hover:border-purple-400 transition-all"
+                  className="w-full justify-between text-left h-auto py-4 px-5 bg-white/5 border-white/20 text-white hover:bg-white/10 hover:border-purple-400 transition-all"
                   onClick={() => handleChoice(choice)}
                 >
                   <span>{choice.text}</span>
