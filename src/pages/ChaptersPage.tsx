@@ -15,6 +15,7 @@ import { grade12HistoryQuestions } from '@/data/grade12HistoryQuestions';
 import { grade12CivicsQuestions } from '@/data/grade12CivicsQuestions';
 import { grade12ITQuestions } from '@/data/grade12ITQuestions';
 import { grade11Biology } from '@/data/grade11Biology';
+import { grade11AgricultureQuestions } from '@/data/grade11AgricultureQuestions';
 
 const ChaptersPage = () => {
   const navigate = useNavigate();
@@ -35,6 +36,32 @@ const ChaptersPage = () => {
           id: index + 1,
           title: chapterName,
           description: getGrade11BiologyChapterDescription(chapterName),
+          duration: getDurationEstimate(questions.length),
+          difficulty: getDominantDifficulty(easyQuestions, mediumQuestions, hardQuestions),
+          progress: Math.floor(Math.random() * 101),
+          isCompleted: Math.random() > 0.7,
+          questionsCount: questions.length,
+          difficultyBreakdown: {
+            easy: easyQuestions,
+            medium: mediumQuestions,
+            hard: hardQuestions
+          }
+        };
+      });
+    }
+
+    // Handle Grade 11 Agriculture
+    if (decodedSubject === 'Agriculture' && grade === '11') {
+      return Object.keys(grade11AgricultureQuestions).map((chapterName, index) => {
+        const questions = grade11AgricultureQuestions[chapterName];
+        const easyQuestions = questions.filter(q => q.difficulty === 'Easy').length;
+        const mediumQuestions = questions.filter(q => q.difficulty === 'Medium').length;
+        const hardQuestions = questions.filter(q => q.difficulty === 'Hard').length;
+        
+        return {
+          id: index + 1,
+          title: chapterName,
+          description: getGrade11AgricultureChapterDescription(chapterName),
           duration: getDurationEstimate(questions.length),
           difficulty: getDominantDifficulty(easyQuestions, mediumQuestions, hardQuestions),
           progress: Math.floor(Math.random() * 101),
@@ -380,6 +407,28 @@ const ChaptersPage = () => {
       "Unit 6: Population and natural resources": "Investigate population dynamics, environmental factors, and sustainable resource management"
     };
     return descriptions[chapterName] || "Comprehensive study of biological concepts and life processes";
+  };
+
+  const getGrade11AgricultureChapterDescription = (chapterName: string) => {
+    const descriptions: { [key: string]: string } = {
+      "Chapter 1: Introduction to Crop Production": "Learn the fundamentals of crop production, types of crops, and basic agricultural practices",
+      "Chapter 2: Field Crops Production and Management": "Study field crop cultivation, management practices, and harvest techniques",
+      "Chapter 3: Industrial Crops Production and Management": "Explore industrial crops like cotton and sugarcane, their production and processing",
+      "Chapter 4: Introduction to Farm Animals": "Understand farm animal types, their products, and basic animal husbandry",
+      "Chapter 5: Animal Feeds and Feeding Practices": "Learn about animal nutrition, feed types, and proper feeding management",
+      "Chapter 6: Animal Genetics and Breeding Practices": "Study genetic principles in animal breeding and improvement strategies",
+      "Chapter 7: Farm Animals Housing": "Explore housing design, construction, and management for different farm animals",
+      "Chapter 8: Basic Animal Health and Disease Control": "Learn about common animal diseases, prevention, and treatment methods",
+      "Chapter 9: Dairy Cattle Production and Management": "Study dairy farming practices, milk production, and herd management",
+      "Chapter 10: Introduction to Natural Resources": "Understand types of natural resources and their importance in agriculture",
+      "Chapter 11: Management of Natural Resources": "Learn sustainable management practices for soil, water, and forest resources",
+      "Chapter 12: Concepts of Biodiversity": "Explore biodiversity, its importance, and conservation strategies",
+      "Chapter 13: Climate Change Adaptation and Mitigation": "Study climate change impacts on agriculture and adaptation strategies",
+      "Chapter 14: Mechanized Farming": "Learn about farm machinery, mechanization benefits, and modern farming technology",
+      "Chapter 15: Introduction to Human Nutrition": "Understand nutritional requirements, food groups, and balanced diets",
+      "Chapter 16: Diversified Food Production and Consumption": "Explore food diversification, processing, and sustainable consumption"
+    };
+    return descriptions[chapterName] || "Comprehensive study of agricultural concepts and practices";
   };
 
   const getChapterDescription = (chapterName: string) => {
