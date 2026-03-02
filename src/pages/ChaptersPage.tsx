@@ -16,6 +16,9 @@ import { grade12CivicsQuestions } from '@/data/grade12CivicsQuestions';
 import { grade12ITQuestions } from '@/data/grade12ITQuestions';
 import { grade11Biology } from '@/data/grade11Biology';
 import { grade11AgricultureQuestions } from '@/data/grade11AgricultureQuestions';
+import { grade11Physics } from '@/data/grade11Physics';
+import { grade11Chemistry } from '@/data/grade11Chemistry';
+import { grade11Mathematics } from '@/data/grade11Mathematics';
 
 const ChaptersPage = () => {
   const navigate = useNavigate();
@@ -74,6 +77,87 @@ const ChaptersPage = () => {
           }
         };
       });
+    }
+
+    // Handle Grade 11 Physics
+    if (decodedSubject === 'Physics' && grade === '11') {
+      return Object.keys(grade11Physics).map((chapterName, index) => {
+        const questions = grade11Physics[chapterName];
+        const easyQuestions = questions.filter(q => q.difficulty === 'Easy').length;
+        const mediumQuestions = questions.filter(q => q.difficulty === 'Medium').length;
+        const hardQuestions = questions.filter(q => q.difficulty === 'Hard').length;
+        
+        return {
+          id: index + 1,
+          title: chapterName,
+          description: getGrade11PhysicsChapterDescription(chapterName),
+          duration: getDurationEstimate(questions.length),
+          difficulty: getDominantDifficulty(easyQuestions, mediumQuestions, hardQuestions),
+          progress: Math.floor(Math.random() * 101),
+          isCompleted: Math.random() > 0.7,
+          questionsCount: questions.length,
+          difficultyBreakdown: { easy: easyQuestions, medium: mediumQuestions, hard: hardQuestions }
+        };
+      });
+    }
+
+    // Handle Grade 11 Chemistry
+    if (decodedSubject === 'Chemistry' && grade === '11') {
+      return Object.keys(grade11Chemistry).map((chapterName, index) => {
+        const questions = grade11Chemistry[chapterName];
+        const easyQuestions = questions.filter(q => q.difficulty === 'Easy').length;
+        const mediumQuestions = questions.filter(q => q.difficulty === 'Medium').length;
+        const hardQuestions = questions.filter(q => q.difficulty === 'Hard').length;
+        
+        return {
+          id: index + 1,
+          title: chapterName,
+          description: getGrade11ChemistryChapterDescription(chapterName),
+          duration: getDurationEstimate(questions.length),
+          difficulty: getDominantDifficulty(easyQuestions, mediumQuestions, hardQuestions),
+          progress: Math.floor(Math.random() * 101),
+          isCompleted: Math.random() > 0.7,
+          questionsCount: questions.length,
+          difficultyBreakdown: { easy: easyQuestions, medium: mediumQuestions, hard: hardQuestions }
+        };
+      });
+    }
+
+    // Handle Grade 11 Mathematics
+    if (decodedSubject === 'Mathematics' && grade === '11') {
+      const mathKeys = Object.keys(grade11Mathematics);
+      if (mathKeys.length > 0) {
+        return mathKeys.map((chapterName, index) => {
+          const questions = grade11Mathematics[chapterName];
+          const easyQuestions = questions.filter(q => q.difficulty === 'Easy').length;
+          const mediumQuestions = questions.filter(q => q.difficulty === 'Medium').length;
+          const hardQuestions = questions.filter(q => q.difficulty === 'Hard').length;
+          
+          return {
+            id: index + 1,
+            title: chapterName,
+            description: getGrade11MathChapterDescription(chapterName),
+            duration: getDurationEstimate(questions.length),
+            difficulty: getDominantDifficulty(easyQuestions, mediumQuestions, hardQuestions),
+            progress: 0,
+            isCompleted: false,
+            questionsCount: questions.length,
+            difficultyBreakdown: { easy: easyQuestions, medium: mediumQuestions, hard: hardQuestions }
+          };
+        });
+      }
+      // Mathematics data not yet added - show coming soon
+      return [{
+        id: 1,
+        title: 'Coming Soon',
+        description: 'Grade 11 Mathematics questions are being prepared. Check back soon!',
+        duration: '0 hours',
+        difficulty: 'Intermediate' as string,
+        progress: 0,
+        isCompleted: false,
+        questionsCount: 0,
+        difficultyBreakdown: { easy: 0, medium: 0, hard: 0 }
+      }];
     }
 
     if (decodedSubject === 'Mathematics' && grade === '12') {
@@ -429,6 +513,35 @@ const ChaptersPage = () => {
       "Chapter 16: Diversified Food Production and Consumption": "Explore food diversification, processing, and sustainable consumption"
     };
     return descriptions[chapterName] || "Comprehensive study of agricultural concepts and practices";
+  };
+
+  const getGrade11PhysicsChapterDescription = (chapterName: string) => {
+    const descriptions: { [key: string]: string } = {
+      "Chapter 1: Mechanics": "Study forces, motion, Newton's laws, and fundamental principles of classical mechanics",
+      "Chapter 2: Waves and Sound": "Explore wave properties, sound propagation, frequency, wavelength, and wave behavior",
+      "Chapter 3: Heat and Thermodynamics": "Learn about heat transfer, temperature, thermal expansion, and laws of thermodynamics",
+      "Chapter 4: Electricity and Magnetism": "Understand electric circuits, current, voltage, resistance, and magnetic fields",
+      "Chapter 5: Optics": "Study light behavior, reflection, refraction, lenses, and optical instruments",
+      "Chapter 6: Modern Physics": "Explore atomic models, radioactivity, nuclear energy, and quantum concepts"
+    };
+    return descriptions[chapterName] || "Comprehensive study of physics principles";
+  };
+
+  const getGrade11ChemistryChapterDescription = (chapterName: string) => {
+    const descriptions: { [key: string]: string } = {
+      "Chapter 1: Atomic Structure": "Study atomic models, electron configuration, and periodic trends",
+      "Chapter 2: Chemical Bonding": "Learn about ionic, covalent, and metallic bonds and molecular geometry",
+      "Chapter 3: States of Matter": "Explore properties of solids, liquids, and gases and phase transitions",
+      "Chapter 4: Chemical Reactions": "Understand reaction types, balancing equations, and stoichiometry",
+      "Chapter 5: Acids and Bases": "Study pH, acid-base reactions, neutralization, and buffer solutions",
+      "Chapter 6: Organic Chemistry": "Learn about hydrocarbons, functional groups, and organic reactions",
+      "Chapter 7: Environmental Chemistry": "Explore pollution, water treatment, and environmental protection"
+    };
+    return descriptions[chapterName] || "Comprehensive study of chemistry concepts";
+  };
+
+  const getGrade11MathChapterDescription = (chapterName: string) => {
+    return "Comprehensive study of mathematical concepts and problem-solving techniques";
   };
 
   const getChapterDescription = (chapterName: string) => {
