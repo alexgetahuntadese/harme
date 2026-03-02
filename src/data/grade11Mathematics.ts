@@ -12,9 +12,6 @@ export interface Grade11MathQuestion {
 
 export const grade11Mathematics: { [chapter: string]: Grade11MathQuestion[] } = {
 
-  // ─────────────────────────────────────────────────────────────
-  // UNIT 1: Relations and Functions
-  // ─────────────────────────────────────────────────────────────
   "Unit 1: Relations and Functions": [
     // EASY (10)
     {
