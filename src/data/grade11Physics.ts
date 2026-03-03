@@ -14,7 +14,7 @@ export const grade11Physics: { [chapter: string]: Grade11PhysicsQuestion[] } = {
   'Chapter 1: Mechanics': [
     {
       id: 'g11phy_mech_e1',
-      question: 'What is the SI unit of force in your context test?',
+      question: 'What is the SI unit of force in yourWhat is the SI unit of forceWhat is the SI unit of force context test?',
       options: ['Newton', 'Joule', 'Watt', 'Pascal'],
       correct: 'Newton',
       explanation: 'The Newton (N) is the SI unit of force, defined as kg⋅m/s².',
