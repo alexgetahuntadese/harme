@@ -146,18 +146,56 @@ const ChaptersPage = () => {
           };
         });
       }
-      // Mathematics data not yet added - show coming soon
-      return [{
-        id: 1,
-        title: 'Coming Soon',
-        description: 'Grade 11 Mathematics questions are being prepared. Check back soon!',
+    }
+
+    // Handle Grade 11 subjects without question data yet
+    if (grade === '11' && ['English', 'History', 'Geography', 'Civic Education'].includes(decodedSubject)) {
+      const subjectChapters: Record<string, string[]> = {
+        'English': [
+          'Chapter 1: Reading Comprehension',
+          'Chapter 2: Grammar and Vocabulary',
+          'Chapter 3: Writing Skills',
+          'Chapter 4: Literature Analysis',
+          'Chapter 5: Communication Skills',
+          'Chapter 6: Critical Thinking'
+        ],
+        'History': [
+          'Chapter 1: Ancient Civilizations',
+          'Chapter 2: Medieval Period',
+          'Chapter 3: Modern Ethiopian History',
+          'Chapter 4: World Wars',
+          'Chapter 5: Contemporary History',
+          'Chapter 6: Historical Research Methods'
+        ],
+        'Geography': [
+          'Chapter 1: Physical Geography',
+          'Chapter 2: Human Geography',
+          'Chapter 3: Cartography and GIS',
+          'Chapter 4: Climate and Weather',
+          'Chapter 5: Natural Resources',
+          'Chapter 6: Environmental Issues'
+        ],
+        'Civic Education': [
+          'Chapter 1: Democracy and Governance',
+          'Chapter 2: Human Rights',
+          'Chapter 3: Constitution and Law',
+          'Chapter 4: Citizenship and Responsibilities',
+          'Chapter 5: Ethics and Values',
+          'Chapter 6: Peace and Conflict Resolution'
+        ]
+      };
+
+      return (subjectChapters[decodedSubject] || []).map((chapterName, index) => ({
+        id: index + 1,
+        title: chapterName,
+        description: `Grade 11 ${decodedSubject} - ${chapterName}. Questions coming soon!`,
         duration: '0 hours',
         difficulty: 'Intermediate' as string,
         progress: 0,
         isCompleted: false,
         questionsCount: 0,
         difficultyBreakdown: { easy: 0, medium: 0, hard: 0 }
-      }];
+      }));
     }
 
     if (decodedSubject === 'Mathematics' && grade === '12') {
