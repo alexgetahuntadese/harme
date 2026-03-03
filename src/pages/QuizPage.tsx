@@ -12,7 +12,8 @@ import { grade12AgricultureQuestions } from '@/data/grade12AgricultureQuestions'
 import { getGrade12GeographyQuestions } from '@/data/grade12GeographyQuestions';
 import { getGrade11MathQuestions } from '@/data/grade11Mathematics';
 import { getGrade11BiologyQuestions } from '@/data/grade11Biology';
-import { getGrade11PhysicsQuestions } from '@/data/grade11PhysicsQuestions';
+import { getGrade11PhysicsQuestions } from '@/data/grade11Physic
+  s';
 import { getGrade11ChemistryQuestions } from '@/data/grade11Chemistry';
 import { getGrade11AgricultureQuestions } from '@/data/grade11AgricultureQuestions';
 import QuestionCard from '@/components/QuestionCard';
