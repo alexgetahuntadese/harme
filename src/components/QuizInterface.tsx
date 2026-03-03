@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,27 +16,58 @@ import { getQuestionsForQuiz } from '@/data/naturalScienceQuizzes';
 import QuestionExplanation from './QuestionExplanation';
 import { useLanguage } from '@/i18n/LanguageContext';
 
+interface Quiz {
+    id: string;
+    title: string;
+    subject: string;
+    difficulty: 'Easy' | 'Medium' | 'Hard';
+    duration: number;
+    questions: number;
+    chapters: string[];
+}
+
+interface User {
+    name: string;
+}
+
+interface Results {
+    quiz: Quiz;
+    score: number;
+    correctAnswers: number;
+    totalQuestions: number;
+    timeSpent: number;
+    answers: Record<string, string>;
+}
+
+interface Question {
+    id: string;
+    question: string;
+    options: string[];
+    correct: string;
+    explanation?: string;
+}
+
 interface QuizInterfaceProps {
-  quiz: any;
-  user: any;
-  onComplete: (result: any) => void;
+  quiz: Quiz;
+  user: User;
+  onComplete: (result: Results) => void;
   onBack: () => void;
 }
 
 const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState<Record<number, string>>({});
+  const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [timeLeft, setTimeLeft] = useState(quiz.duration * 60);
   const [quizCompleted, setQuizCompleted] = useState(false);
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState<Results | null>(null);
   const [showExplanation, setShowExplanation] = useState(false);
   const { toast } = useToast();
   const { t } = useLanguage();
 
-  const questions = useMemo(() => {
+  const questions: Question[] = useMemo(() => {
     const generateQuestions = () => {
       if (quiz.chapters && quiz.chapters.length > 0) {
-        const allQuestions: any[] = [];
+        const allQuestions: Question[] = [];
         quiz.chapters.forEach((chapter: string) => {
           const chapterQuestions = getQuestionsForQuiz(quiz.subject, chapter, quiz.difficulty, 2);
           allQuestions.push(...chapterQuestions);
@@ -52,6 +83,26 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
+  const handleSubmitQuiz = useCallback(() => {
+    const correctAnswers = questions.filter(q => selectedAnswers[q.id] === q.correct).length;
+    const score = Math.round((correctAnswers / questions.length) * 100);
+    
+    const quizResults: Results = {
+      quiz, score, correctAnswers, totalQuestions: questions.length,
+      timeSpent: (quiz.duration * 60) - timeLeft, answers: selectedAnswers
+    };
+    
+    setResults(quizResults);
+    setQuizCompleted(true);
+
+    toast({
+      title: t('session.quizCompleted'),
+      description: `${t('results.score')}: ${score}% (${correctAnswers}/${questions.length})`,
+    });
+
+    onComplete(quizResults);
+  }, [questions, selectedAnswers, quiz, timeLeft, onComplete, t]);
+
   useEffect(() => {
     if (timeLeft > 0 && !quizCompleted) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -59,7 +110,7 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
     } else if (timeLeft === 0 && !quizCompleted) {
       handleSubmitQuiz();
     }
-  }, [timeLeft, quizCompleted]);
+  }, [timeLeft, quizCompleted, handleSubmitQuiz]);
 
   useEffect(() => {
     setShowExplanation(false);
@@ -91,26 +142,6 @@ const QuizInterface = ({ quiz, user, onComplete, onBack }: QuizInterfaceProps) =
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
-  };
-
-  const handleSubmitQuiz = () => {
-    const correctAnswers = questions.filter(q => selectedAnswers[q.id] === q.correct).length;
-    const score = Math.round((correctAnswers / questions.length) * 100);
-    
-    const quizResults = {
-      quiz, score, correctAnswers, totalQuestions: questions.length,
-      timeSpent: (quiz.duration * 60) - timeLeft, answers: selectedAnswers
-    };
-    
-    setResults(quizResults);
-    setQuizCompleted(true);
-
-    toast({
-      title: t('session.quizCompleted'),
-      description: `${t('results.score')}: ${score}% (${correctAnswers}/${questions.length})`,
-    });
-
-    onComplete(quizResults);
   };
 
   const handleRetakeQuiz = () => {

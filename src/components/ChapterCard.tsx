@@ -4,16 +4,29 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Play, BookOpen, Clock, Target } from 'lucide-react';
 
+interface Quiz {
+  id: string;
+  title: string;
+  subject: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  duration: number;
+  questions: number;
+  completed: boolean;
+  score: number | null;
+  grade: number;
+  chapters: string[];
+}
+
 interface ChapterCardProps {
   chapter: string;
   subject: string;
   subjectIcon: React.ComponentType<{ className?: string }>;
-  onSelectQuiz: (quiz: any) => void;
+  onSelectQuiz: (quiz: Quiz) => void;
   grade: number;
 }
 
 const ChapterCard = ({ chapter, subject, subjectIcon: Icon, onSelectQuiz, grade }: ChapterCardProps) => {
-  const createQuiz = (difficulty: 'Easy' | 'Medium' | 'Hard') => {
+  const createQuiz = (difficulty: 'Easy' | 'Medium' | 'Hard'): Quiz => {
     return {
       id: Math.random().toString(36).substr(2, 9),
       title: `${subject} - ${chapter} (${difficulty})`,

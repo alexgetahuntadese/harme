@@ -41,10 +41,31 @@ import SubjectSection from './SubjectSection';
 import SubjectCard from './SubjectCard';
 import { useIsMobile } from '../hooks/useIsMobile';
 
+interface Quiz {
+  id: string;
+  title: string;
+  subject: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  duration: number;
+  questions: number;
+  completed: boolean;
+  score: number | null;
+  grade: number;
+  chapters: string[];
+}
+
+interface Subject {
+    name: string;
+    icon: React.ComponentType<{ className?: string }>;
+    chapters?: string[];
+    topics?: string[];
+
+}
+
 interface QuizDashboardProps {
   user: { name: string; grade: string; school?: string };
   onLogout: () => void;
-  onSelectQuiz: (quiz: any) => void;
+  onSelectQuiz: (quiz: Quiz) => void;
 }
 
 const QuizDashboard = ({ user, onLogout, onSelectQuiz }: QuizDashboardProps) => {
@@ -384,7 +405,7 @@ const QuizDashboard = ({ user, onLogout, onSelectQuiz }: QuizDashboardProps) => 
     return mockData[subjectName as keyof typeof mockData] || { completed: 0, total: 10, percentage: 0 };
   };
 
-  const createQuiz = (subject: any, grade: number, difficulty: 'Easy' | 'Medium' | 'Hard') => {
+  const createQuiz = (subject: Subject, grade: number, difficulty: 'Easy' | 'Medium' | 'Hard'): Quiz => {
     return {
       id: Math.random().toString(36).substr(2, 9),
       title: `${subject.name} - Grade ${grade} (${difficulty})`,
@@ -395,7 +416,7 @@ const QuizDashboard = ({ user, onLogout, onSelectQuiz }: QuizDashboardProps) => 
       completed: false,
       score: null,
       grade: grade,
-      chapters: subject.chapters || subject.topics
+      chapters: subject.chapters || subject.topics || []
     };
   };
 
