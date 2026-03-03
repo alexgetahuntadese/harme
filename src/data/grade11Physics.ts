@@ -14,12 +14,54 @@ export const grade11Physics: { [chapter: string]: Grade11PhysicsQuestion[] } = {
   'Chapter 1: Mechanics': [
     {
       id: 'g11phy_mech_e1',
-      question: 'What is the SI unit of force in yourWhat is the SI unit of forceWhat is the SI unit of force context test?',
+      question: 'What is the SI unit of force?',
       options: ['Newton', 'Joule', 'Watt', 'Pascal'],
       correct: 'Newton',
       explanation: 'The Newton (N) is the SI unit of force, defined as kg⋅m/s².',
       difficulty: 'Easy',
       chapter: 'Chapter 1: Mechanics',
+      subject: 'Physics'
+    },
+    {
+      id: 'g11phy_mech_m1',
+      question: 'What is Newton\'s second law of motion?',
+      options: ['F = ma', 'F = mv', 'F = ma²', 'F = m/a'],
+      correct: 'F = ma',
+      explanation: 'Newton\'s second law states that force equals mass times acceleration (F = ma).',
+      difficulty: 'Medium',
+      chapter: 'Chapter 1: Mechanics',
+      subject: 'Physics'
+    },
+    {
+      id: 'g11phy_mech_h1',
+      question: 'A 5kg object accelerates at 2 m/s². What is the net force acting on it?',
+      options: ['10 N', '2.5 N', '7 N', '3 N'],
+      correct: '10 N',
+      explanation: 'Using F = ma: F = 5 kg × 2 m/s² = 10 N.',
+      difficulty: 'Hard',
+      chapter: 'Chapter 1: Mechanics',
+      subject: 'Physics'
+    }
+  ],
+  'Chapter 2: Waves and Sound': [
+    {
+      id: 'g11phy_wave_e1',
+      question: 'What is a wave?',
+      options: ['A disturbance that transfers energy', 'A solid object', 'A type of matter', 'A chemical reaction'],
+      correct: 'A disturbance that transfers energy',
+      explanation: 'A wave is a disturbance that travels through space and matter, transferring energy without transferring matter.',
+      difficulty: 'Easy',
+      chapter: 'Chapter 2: Waves and Sound',
+      subject: 'Physics'
+    },
+    {
+      id: 'g11phy_wave_m1',
+      question: 'What is the relationship between frequency and wavelength?',
+      options: ['Inversely proportional', 'Directly proportional', 'No relationship', 'Exponentially related'],
+      correct: 'Inversely proportional',
+      explanation: 'As frequency increases, wavelength decreases (v = fλ, where v is constant).',
+      difficulty: 'Medium',
+      chapter: 'Chapter 2: Waves and Sound',
       subject: 'Physics'
     },
     {
